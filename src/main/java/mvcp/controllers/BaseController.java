@@ -1,6 +1,7 @@
 package mvcp.controllers;
 
 import mvcp.entities.BaseEntity;
+import mvcp.repositories.BaseRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by marcelo on 8/9/16.
@@ -19,11 +18,11 @@ import java.util.List;
 public class BaseController<E extends BaseEntity> {
 
 
-    protected List<E> repository;
+    protected BaseRepository<E> repository;
 
     @PostConstruct
     public void init() {
-        repository = new ArrayList<>();
+        repository = new BaseRepository<>();
         repository.add((E) new BaseEntity());
         repository.add((E) new BaseEntity());
     }
@@ -31,8 +30,9 @@ public class BaseController<E extends BaseEntity> {
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<E> list() {
-        return repository;
+        return repository.list();
     }
+
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity create(@RequestBody E entity) {
@@ -45,12 +45,11 @@ public class BaseController<E extends BaseEntity> {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     private ResponseEntity get(@PathVariable("id") String id) throws Exception {
-        if (this.repository != null && this.repository.size() > 0) {
-            E doc = repository.stream()
-                    .filter(t -> t.getId().equalsIgnoreCase(id))
-                    .findFirst()
-                    .orElseThrow(() -> new Exception(getGenericClass().getSimpleName() + " not found"));
-            return ResponseEntity.ok().body(doc);
+        if (this.repository != null) {
+            E doc = repository.get(id);
+            if (doc != null) {
+                return ResponseEntity.ok().body(doc);
+            }
         }
         return ResponseEntity.notFound().build();
     }
@@ -58,6 +57,7 @@ public class BaseController<E extends BaseEntity> {
 
     /**
      * Método de recuperação da Collection correspondente
+     *
      * @return
      */
     public Class<E> getGenericClass() {

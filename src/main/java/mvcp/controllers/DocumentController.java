@@ -2,10 +2,9 @@ package mvcp.controllers;
 
 import mvcp.entities.Document;
 import mvcp.enums.DocumentType;
+import mvcp.repositories.DocumentRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
 
 /**
  * Created by marcelo on 8/9/16.
@@ -18,7 +17,8 @@ public class DocumentController extends BaseController<Document> {
     public void init() {
         super.init();
         System.out.println("Initializing document repository...");
-        repository = new ArrayList<>();
+        repository = new DocumentRepository();
+
         Document d = new Document();
         d.setId("1");
         d.setName("CPF");

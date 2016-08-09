@@ -23,11 +23,9 @@ public class BaseController<E extends BaseEntity> {
 
     @PostConstruct
     public void init() {
-        System.out.println("Initializing base repository...");
         repository = new ArrayList<>();
         repository.add((E) new BaseEntity());
         repository.add((E) new BaseEntity());
-        System.out.println("Done.");
     }
 
 

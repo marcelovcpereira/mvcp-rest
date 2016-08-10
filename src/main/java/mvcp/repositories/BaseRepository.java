@@ -1,18 +1,28 @@
 package mvcp.repositories;
 
 import mvcp.entities.BaseEntity;
+import mvcp.entities.Document;
+import mvcp.enums.DocumentType;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by marcelo on 8/9/16.
+ *
+ * @author marcelo
+ * @since 8/9/16.
  */
-public class BaseRepository<E extends BaseEntity> {
+public class BaseRepository<E extends BaseEntity> implements IRepository<E> {
 
-    protected List<E> repository = new ArrayList<>();
+    protected List<E> repository;
+
+    @PostConstruct
+    public void init() {
+        repository = new ArrayList<>();
+    }
 
 
     public E get(String id) throws Exception {
@@ -26,12 +36,15 @@ public class BaseRepository<E extends BaseEntity> {
         return null;
     }
 
+
+    @Override
     public Collection<E> list() {
         return repository;
     }
 
+    @Override
     public void add(E entity) {
-        this.repository.add(entity);
+        this.repository.add((E) entity);
     }
 
 

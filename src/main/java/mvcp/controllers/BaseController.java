@@ -2,13 +2,13 @@ package mvcp.controllers;
 
 import mvcp.entities.BaseEntity;
 import mvcp.repositories.BaseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
@@ -17,15 +17,8 @@ import java.util.Collection;
  */
 public class BaseController<E extends BaseEntity> {
 
-
+    @Autowired
     protected BaseRepository<E> repository;
-
-    @PostConstruct
-    public void init() {
-        repository = new BaseRepository<>();
-        repository.add((E) new BaseEntity());
-        repository.add((E) new BaseEntity());
-    }
 
 
     @RequestMapping(method = RequestMethod.GET)

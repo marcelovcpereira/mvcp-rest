@@ -1,7 +1,0 @@
-mvcp/controllers/DocumentController.class
-mvcp/entities/Document.class
-mvcp/main/Application.class
-mvcp/controllers/BaseController.class
-mvcp/entities/BaseEntity.class
-mvcp/enums/DocumentType.class
-mvcp/entities/User.class
